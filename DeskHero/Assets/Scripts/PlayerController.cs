@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
 {
 
     public InputAction MoveAction;
+
+    Rigidbody2D rigidbody2d;
+    Vector2 move;
     public playerDirection direction;
     public Animator animator;
 
@@ -31,6 +34,7 @@ public class PlayerController : MonoBehaviour
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
         MoveAction.Enable();
+        rigidbody2d = GetComponent<Rigidbody2D>();
         isMoving = false;
 
     }
@@ -38,7 +42,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 move = MoveAction.ReadValue<Vector2>();
+        move = MoveAction.ReadValue<Vector2>();
 
         if (move != Vector2.zero)
         {
@@ -70,9 +74,14 @@ public class PlayerController : MonoBehaviour
         animator.SetInteger("Direction", (int)direction);
         animator.SetBool("isMoving", isMoving);
 
-        Debug.Log(move);
-        Vector2 position = (Vector2)transform.position + move * 4.0f * Time.deltaTime;
-        transform.position = position;        
+        //Debug.Log(move);
+     
 
+    }
+
+    void FixedUpdate()
+    {
+        Vector2 position = (Vector2)rigidbody2d.position + move * 4.0f * Time.deltaTime;
+        rigidbody2d.MovePosition(position);
     }
 }
